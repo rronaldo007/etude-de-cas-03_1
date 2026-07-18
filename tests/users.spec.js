@@ -9,7 +9,7 @@ const usersService = require("../api/users/users.service");
 
 describe("tester API users", () => {
   let token;
-  const USER_ID = "fake";
+  const USER_ID = "507f1f77bcf86cd799439011";
   const MOCK_DATA = [
     {
       _id: USER_ID,
@@ -28,6 +28,8 @@ describe("tester API users", () => {
     token = jwt.sign({ userId: USER_ID }, config.secretJwtToken);
     // mongoose.Query.prototype.find = jest.fn().mockResolvedValue(MOCK_DATA);
     mockingoose(User).toReturn(MOCK_DATA, "find");
+    // Le middleware d'auth charge désormais l'utilisateur en base (findById → findOne).
+    mockingoose(User).toReturn(MOCK_DATA[0], "findOne");
     mockingoose(User).toReturn(MOCK_DATA_CREATED, "save");
   });
 
