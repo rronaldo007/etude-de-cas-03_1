@@ -1,0 +1,21 @@
+services:
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # L'app joint le service "mongo" par son nom DNS sur le réseau compose,
+      # pas "localhost" (cf. config/index.js -> process.env.MONGO_URI).
+      MONGO_URI: mongodb://mongo:27017/myapp
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
