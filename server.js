@@ -28,6 +28,9 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.json());
 
+// Route publique : déclarée AVANT le middleware d'auth pour ne pas être protégée.
+app.get("/api/users/:userId/articles", usersController.getArticles);
+
 app.use("/api/users", authMiddleware, userRouter);
 app.use("/api/articles", authMiddleware, articleRouter);
 app.post("/login", usersController.login);
